@@ -58,7 +58,11 @@ extern "C"
 		cv::Mat R;
 		cv::Rodrigues(rvec, R);
 
-		cv::Mat matPt = (cv::Mat_<double>(3, 1) << pt.x, pt.y, pt.z);
+		cv::Mat matPt(3, 1, CV_64F);
+		matPt.at<double>(0, 0) = pt.x;
+		matPt.at<double>(1, 0) = pt.y;
+		matPt.at<double>(2, 0) = pt.z;
+
 		cv::Mat matPtTrans = R * matPt + tvec;
 		ptTrans.x = matPtTrans.at<double>(0, 0);
 		ptTrans.y = matPtTrans.at<double>(1, 0);
@@ -97,12 +101,10 @@ extern "C"
 		cv::Mat rotationVector1;
 
 		/* TODO 2.2 Create translation vector from input data */
-		cv::Mat translationVector1 = (cv::Mat_<double>(3, 1) << 0.0f, 0.0f, 0.0f);
+		cv::Mat translationVector1 = cv::Mat::zeros(3, 1, CV_64F);
 
 		/* TODO 2.3 Create camera intrinsic matrix from input data */
-		cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << 0.0f, 0.0f, 0.0f,
-														  0.0f, 0.0f, 0.0f,
-														  0.0f, 0.0f, 0.0f);
+		cv::Mat cameraMatrix = cv::Mat::zeros(3, 3, CV_64F);
 
 		/* Convert Unity feature points and their projections to OpenCV format */
 		std::vector<cv::Point2d> points2DOpenCV;
