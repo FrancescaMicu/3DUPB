@@ -1,0 +1,16 @@
+﻿  Computer Vision Plugin.cpp
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(317,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(384,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(454,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(524,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(590,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(661,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(728,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(795,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+     Creating library F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.lib and object F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.exp
+  Generating code
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 753 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Computer Vision Plugin.vcxproj -> F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.exe
