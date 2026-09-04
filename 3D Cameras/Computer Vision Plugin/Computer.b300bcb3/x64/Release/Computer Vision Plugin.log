@@ -1,16 +1,36 @@
 ﻿  Computer Vision Plugin.cpp
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(317,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(384,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(454,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(524,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(590,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(661,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(728,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(795,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(90,10): warning C4190: 'quaternionToMatrix' has C-linkage specified, but returns 'cv::Mat' which is incompatible with C
+      F:\3D_UPB\3D_Cameras\opencv-5.x\build\install\include\opencv2\core\mat.hpp(965,18):
+      see declaration of 'cv::Mat'
+  
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(247,49): warning C4244: '=': conversion from '_Tp' to 'float', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(247,49): warning C4244:         with
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(247,49): warning C4244:         [
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(247,49): warning C4244:             _Tp=double
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(247,49): warning C4244:         ]
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,20): warning C4244: '=': conversion from '_Tp' to 'float', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,20): warning C4244:         with
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,20): warning C4244:         [
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,20): warning C4244:             _Tp=double
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(248,20): warning C4244:         ]
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(249,49): warning C4244: '=': conversion from '_Tp' to 'float', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(249,49): warning C4244:         with
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(249,49): warning C4244:         [
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(249,49): warning C4244:             _Tp=double
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(249,49): warning C4244:         ]
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(430,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(499,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(566,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(636,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(706,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(772,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(843,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(910,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\Computer Vision Plugin.cpp(977,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
      Creating library F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.lib and object F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.exp
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 753 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  2 of 272 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  Computer Vision Plugin.vcxproj -> F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.exe
+  Computer Vision Plugin.vcxproj -> F:\3D_UPB\3D_Cameras\3DUPB\3D Cameras\Computer Vision Plugin\x64\Release\Computer Vision Plugin.dll

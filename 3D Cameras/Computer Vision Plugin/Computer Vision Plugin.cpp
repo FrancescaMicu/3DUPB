@@ -69,9 +69,9 @@ extern "C"
 		ptTrans.z = matPtTrans.at<double>(2, 0);
 	}
 
-	void recoverPoseFromPnP(const std::vector<cv::Point3d>& objectPoints1, const cv::Mat& rvec1, 
-							const cv::Mat& tvec1, const std::vector<cv::Point2d>& imagePoints2,
-							const cv::Mat& cameraMatrix, cv::Mat& rvec1to2, cv::Mat& tvec1to2)
+	void recoverPoseFromPnP(const std::vector<cv::Point3d>& objectPoints1, const cv::Mat& rvec1,
+		const cv::Mat& tvec1, const std::vector<cv::Point2d>& imagePoints2,
+		const cv::Mat& cameraMatrix, cv::Mat& rvec1to2, cv::Mat& tvec1to2)
 	{
 		cv::Mat R1;
 		cv::Rodrigues(rvec1, R1);
@@ -87,24 +87,134 @@ extern "C"
 		cv::solvePnPRansac(objectPoints1InCam, imagePoints2, cameraMatrix, cv::noArray(), rvec1to2, tvec1to2, false, cv::SOLVEPNP_ITERATIVE);
 	}
 
+	cv::Mat quaternionToMatrix(const cv::Vec4f& q) {
+		double sqx = (double)q[0] * q[0];
+		double sqy = (double)q[1] * q[1];
+		double sqz = (double)q[2] * q[2];
+		double sqw = (double)q[3] * q[3];
+
+		double invSquareRoot = 1.0 / (sqx + sqy + sqz + sqw);
+
+		double m00 = (sqx - sqy - sqz + sqw) * invSquareRoot;
+		double m11 = (-sqx + sqy - sqz + sqw) * invSquareRoot;
+		double m22 = (-sqx - sqy + sqz + sqw) * invSquareRoot;
+
+		double tmp1 = (double)q[0] * q[1];
+		double tmp2 = (double)q[2] * q[3];
+		double m10 = 2.0 * (tmp1 + tmp2) * invSquareRoot;
+		double m01 = 2.0 * (tmp1 - tmp2) * invSquareRoot;
+
+		tmp1 = (double)q[0] * q[2];
+		tmp2 = (double)q[1] * q[3];
+		double m20 = 2.0 * (tmp1 - tmp2) * invSquareRoot;
+		double m02 = 2.0 * (tmp1 + tmp2) * invSquareRoot;
+
+		tmp1 = (double)q[1] * q[2];
+		tmp2 = (double)q[0] * q[3];
+		double m21 = 2.0 * (tmp1 + tmp2) * invSquareRoot;
+		double m12 = 2.0 * (tmp1 - tmp2) * invSquareRoot;
+
+		cv::Mat R = cv::Mat::zeros(3, 3, CV_64F);
+
+		R.at<double>(0, 0) = m00;
+		R.at<double>(0, 1) = m01;
+		R.at<double>(0, 2) = m02;
+
+		R.at<double>(1, 0) = m10;
+		R.at<double>(1, 1) = m11;
+		R.at<double>(1, 2) = m12;
+
+		R.at<double>(2, 0) = m20;
+		R.at<double>(2, 1) = m21;
+		R.at<double>(2, 2) = m22;
+
+		return R;
+	}
+
+	Vector4 matrixToQuaternion(const cv::Mat& R) {
+		Vector4 q;
+
+		// Extragerea elementelor din matricea OpenCV 3x3
+		double m00 = R.at<double>(0, 0);
+		double m01 = R.at<double>(0, 1);
+		double m02 = R.at<double>(0, 2);
+
+		double m10 = R.at<double>(1, 0);
+		double m11 = R.at<double>(1, 1);
+		double m12 = R.at<double>(1, 2);
+
+		double m20 = R.at<double>(2, 0);
+		double m21 = R.at<double>(2, 1);
+		double m22 = R.at<double>(2, 2);
+
+		// Calculul urme matricei (trace)
+		double tr = m00 + m11 + m22;
+
+		if (tr > 0.0) {
+			double S = std::sqrt(tr + 1.0) * 2.0; // S = 4 * q.w
+			q.w = static_cast<float>(0.25 * S);
+			q.x = static_cast<float>((m21 - m12) / S);
+			q.y = static_cast<float>((m02 - m20) / S);
+			q.z = static_cast<float>((m10 - m01) / S);
+		}
+		else if ((m00 > m11) && (m00 > m22)) {
+			double S = std::sqrt(1.0 + m00 - m11 - m22) * 2.0; // S = 4 * q.x
+			q.w = static_cast<float>((m21 - m12) / S);
+			q.x = static_cast<float>(0.25 * S);
+			q.y = static_cast<float>((m01 + m10) / S);
+			q.z = static_cast<float>((m02 + m20) / S);
+		}
+		else if (m11 > m22) {
+			double S = std::sqrt(1.0 + m11 - m00 - m22) * 2.0; // S = 4 * q.y
+			q.w = static_cast<float>((m02 - m20) / S);
+			q.x = static_cast<float>((m01 + m10) / S);
+			q.y = static_cast<float>(0.25 * S);
+			q.z = static_cast<float>((m12 + m21) / S);
+		}
+		else {
+			double S = std::sqrt(1.0 + m22 - m00 - m11) * 2.0; // S = 4 * q.z
+			q.w = static_cast<float>((m10 - m01) / S);
+			q.x = static_cast<float>((m02 + m20) / S);
+			q.y = static_cast<float>((m12 + m21) / S);
+			q.z = static_cast<float>(0.25 * S);
+		}
+
+		return q;
+	}
+
 	EXPORT_API void PNP(Vector3 position1, Vector4 rotation1, Matrix cameraIntrinsics, Vector3 points3DUnity[8], Vector2 points2DUnity[8], 
 						Vector3 position2[1], Vector4 rotation2[1])
 	{
 		/* Quaternion to rotation matrix */
 		/* TODO 2.1.1 Create quaternion from input data */
-		cv::Vec4f quaternion1{ 0.0f, 0.0f, 0.0f, 1.0f };
+		cv::Vec4f quaternion1{ -rotation1.x, rotation1.y, -rotation1.z, rotation1.w};
 
 		/* TODO 2.1.2 Convert quaternion to rotation matrix */
-		cv::Mat rotationMatrix1(cv::Size(3, 3), CV_64FC1);
+		cv::Mat rotationMatrix1 = quaternionToMatrix(quaternion1);
 
 		/* TODO 2.1.3 Convert rotation matrix to rotation vector */
 		cv::Mat rotationVector1;
+		cv::Rodrigues(rotationMatrix1, rotationVector1);
 
 		/* TODO 2.2 Create translation vector from input data */
 		cv::Mat translationVector1 = cv::Mat::zeros(3, 1, CV_64F);
+		translationVector1.at<double>(0, 0) = position1.x;
+		translationVector1.at<double>(1, 0) = -position1.y;
+		translationVector1.at<double>(2, 0) = position1.z;
 
 		/* TODO 2.3 Create camera intrinsic matrix from input data */
 		cv::Mat cameraMatrix = cv::Mat::zeros(3, 3, CV_64F);
+		cameraMatrix.at<double>(0, 0) = cameraIntrinsics.fx;
+		cameraMatrix.at<double>(0, 1) = 0.0;
+		cameraMatrix.at<double>(0, 2) = cameraIntrinsics.px;
+
+		cameraMatrix.at<double>(1, 0) = 0.0;
+		cameraMatrix.at<double>(1, 1) = cameraIntrinsics.fy;
+		cameraMatrix.at<double>(1, 2) = cameraIntrinsics.py;
+
+		cameraMatrix.at<double>(2, 0) = 0.0;
+		cameraMatrix.at<double>(2, 1) = 0.0;
+		cameraMatrix.at<double>(2, 2) = 1.0;
 
 		/* Convert Unity feature points and their projections to OpenCV format */
 		std::vector<cv::Point2d> points2DOpenCV;
@@ -116,7 +226,7 @@ extern "C"
 			points3DOpenCV.push_back(cv::Point3d(points3DUnity[i].x, -points3DUnity[i].y, points3DUnity[i].z));
 		}
 
-		/* PNP */
+		///* PNP */
 		cv::Mat R1;
 		Rodrigues(rotationVector1, R1);
 		R1 = R1.t();
@@ -127,16 +237,35 @@ extern "C"
 		recoverPoseFromPnP(points3DOpenCV, rotationVector1, translationVector1, points2DOpenCV, cameraMatrix, rotationVector2, translationVector2);
 
 		/* TODO 2.4 Inverse results */
+		cv::Mat R2;
+		Rodrigues(rotationVector2, R2);
+		R2 = R2.t();
+		translationVector2 = -R2 * translationVector2;
+		Rodrigues(R2, rotationVector2);
 
 		/* TODO 2.5 Save position */
-		position2[0].x = 0;
-		position2[0].y = 0;
-		position2[0].z = 0;
+		position2[0].x = translationVector2.at<double>(0, 0);
+		position2[0].y = -translationVector2.at<double>(1, 0);
+		position2[0].z = translationVector2.at<double>(2, 0);
 
 		/* Save orientation */
 		/* - TODO 2.6.1 Convert rotation vector to rotation matrix */
+		cv::Mat R3;
+		Rodrigues(rotationVector2, R3);
 		/* - TODO 2.6.2 Convert rotation matrix to quaternion */
+		Vector4 quaternion2 = matrixToQuaternion(R3);
 		/* - TODO 2.6.3 Normalize the quaternion */
+		rotation2[0].x = -quaternion2.x;
+		rotation2[0].y = quaternion2.y;
+		rotation2[0].z = -quaternion2.z;
+		rotation2[0].w = quaternion2.w;
+
+		float norm = sqrt(rotation2[0].x * rotation2[0].x + rotation2[0].y * rotation2[0].y + rotation2[0].z * rotation2[0].z + rotation2[0].w * rotation2[0].w);
+		
+		rotation2[0].x /= norm;
+		rotation2[0].y /= norm;
+		rotation2[0].z /= norm;
+		rotation2[0].w /= norm;
 	}
 } // end of export C block
 
@@ -255,7 +384,7 @@ void DetectorBFSift(cv::Mat image1, cv::Mat image2, std::ofstream& measure)
 
 	/* TODO 1.6.4 Compute execution time of BF */
 	auto endBF = std::chrono::high_resolution_clock::now();
-	auto durationBF = std::chrono::duration_cast<std::chrono::milliseconds>(endSift - startSift).count();
+	auto durationBF = std::chrono::duration_cast<std::chrono::milliseconds>(endBF - startBF).count();
 
 	/* Save execution time and number of matched feature points */
 	measure << "BF matcher execution time: " << durationBF << std::endl;
@@ -856,3 +985,54 @@ int main()
 	FeatureDetection();
 	return 0;
 }
+
+//  masuratori
+//SIFT detectors execution time : 1221
+//SIFT detected 16161 and 63541 keypoints
+//FLANN matcher execution time : 610
+//FLANN matched 1438 keypoints
+//
+//SIFT detectors execution time : 1127
+//SIFT detected 16161 and 63541 keypoints
+//BF matcher execution time : 3389
+//BF matched 20 keypoints
+//
+//ORB detectors execution time : 793
+//ORB detected 500 and 500 keypoints
+//BF matcher execution time : 2
+//BF matched 20 keypoints
+//
+//SURF detectors execution time : 739
+//SURF detected 13202 and 12108 keypoints
+//BF matcher execution time : 337
+//BF matched 20 keypoints
+//
+//FAST detectors execution time : 16
+//FAST detected 8235 and 56842 keypoints
+//BF matcher execution time : 1534
+//BF matched 20 keypoints
+//
+//STAR detectors execution time : 564
+//STAR detected 343 and 730 keypoints
+//BF matcher execution time : 1
+//BF matched 20 keypoints
+//
+//BRISK detectors execution time : 446
+//BRISK detected 3722 and 23582 keypoints
+//BF matcher execution time : 176
+//BF matched 20 keypoints
+//
+//GFTT detectors execution time : 324
+//GFTT detected 1000 and 1000 keypoints
+//BF matcher execution time : 2
+//BF matched 20 keypoints
+//
+//KAZE detectors execution time : 6382
+//KAZE detected 3012 and 2882 keypoints
+//BF matcher execution time : 44
+//BF matched 20 keypoints
+//
+//AKAZE detectors execution time : 1091
+//AKAZE detected 3671 and 3988 keypoints
+//BF matcher execution time : 27
+//BF matched 20 keypoints
